@@ -1,6 +1,7 @@
 package in.codingage.blooms.models;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Category {
     private String id;
@@ -12,7 +13,7 @@ public class Category {
 
     private boolean active;
 
-    private Timestamp createdDTTM;
+    private LocalDateTime createdDTTM;
     private String createdBy;
 
     private String status;
@@ -57,11 +58,11 @@ public class Category {
         this.active = active;
     }
 
-    public Timestamp getCreatedDTTM() {
+    public LocalDateTime getCreatedDTTM() {
         return createdDTTM;
     }
 
-    public void setCreatedDTTM(Timestamp createdDTTM) {
+    public void setCreatedDTTM(LocalDateTime createdDTTM) {
         this.createdDTTM = createdDTTM;
     }
 
