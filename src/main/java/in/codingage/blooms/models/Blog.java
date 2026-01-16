@@ -1,9 +1,17 @@
 package in.codingage.blooms.models;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.sql.Timestamp;
 import java.util.List;
 
+@Table(name = "blogs")
+@Entity
 public class Blog {
+    @Id
     private String id;
 
     private String title;
@@ -18,6 +26,7 @@ public class Blog {
 
     private Timestamp createdDTTM;
 
+    @ElementCollection
     private List<CategoryMapping> categoryMappings;
 
     public String getId() {

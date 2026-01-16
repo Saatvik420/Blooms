@@ -1,7 +1,10 @@
 package in.codingage.blooms.models;
 
-import java.util.List;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Table;
 
+import java.util.List;
+@Embeddable
 public class CategoryMapping {
     private String categoryId;
     private List<String> subCategoryIds;

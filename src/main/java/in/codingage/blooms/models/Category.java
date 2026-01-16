@@ -1,9 +1,15 @@
 package in.codingage.blooms.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
+@Table(name = "categories")
+@Entity
 public class Category {
+    @Id
     private String id;
     private String name;
 

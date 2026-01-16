@@ -1,8 +1,19 @@
 package in.codingage.blooms.models;
 
-import java.sql.Timestamp;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Table(name = "sub_categories")
+@Entity
 public class SubCategory {
+    @Id
     private String id;
     private String categoryId;
     private String name;
@@ -13,7 +24,7 @@ public class SubCategory {
     private String Status;
 
     private String createdBy;
-    private Timestamp createdDTTM;
+    private LocalDateTime createdDTTM;
 
     public String getId() {
         return id;
@@ -71,11 +82,11 @@ public class SubCategory {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getCreatedDTTM() {
+    public LocalDateTime getCreatedDTTM() {
         return createdDTTM;
     }
 
-    public void setCreatedDTTM(Timestamp createdDTTM) {
+    public void setCreatedDTTM(LocalDateTime createdDTTM) {
         this.createdDTTM = createdDTTM;
     }
 }
