@@ -53,11 +53,16 @@
 				<scope>runtime</scope>
 			</dependency>
 
+			<!-- REQUIRED for H2 Console in Spring Boot 4 -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-h2console</artifactId>
+			</dependency>
+
 			<dependency>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-				<version>2.8.5</version>
-
+				<version>3.0.0</version>
 			</dependency>
 
 		<dependency>

@@ -4,16 +4,16 @@ public class CategoryRequest {
     private String title;
     private String id;
     private String desc;
-    private String cUrl;
+    private String categoryUrl;
 
     public String getId() {
         return id;
     }
 
-    public CategoryRequest(String title, String desc, String cUrl) {
+    public CategoryRequest(String title, String desc, String categoryUrl) {
         this.title = title;
         this.desc = desc;
-        this.cUrl = cUrl;
+        this.categoryUrl = categoryUrl;
     }
 
     public String getTitle() {
@@ -32,11 +32,11 @@ public class CategoryRequest {
         this.desc = desc;
     }
 
-    public String getcUrl() {
-        return cUrl;
+    public String getCategoryUrl() {
+        return categoryUrl;
     }
 
-    public void setcUrl(String cUrl) {
-        this.cUrl = cUrl;
+    public void setCategoryUrl(String categoryUrl) {
+        this.categoryUrl = categoryUrl;
     }
 }

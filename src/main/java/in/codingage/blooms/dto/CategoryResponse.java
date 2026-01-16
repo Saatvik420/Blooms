@@ -4,7 +4,7 @@ public class CategoryResponse {
     private String id;
     private String title;
     private String desc;
-    private String cUrl;
+    private String categoryUrl;
 
     public CategoryResponse() {
     }
@@ -13,7 +13,7 @@ public class CategoryResponse {
         this.id = id;
         this.title = title;
         this.desc = desc;
-        this.cUrl = cUrl;
+        this.categoryUrl = cUrl;
     }
 
     public String getTitle() {
@@ -32,12 +32,12 @@ public class CategoryResponse {
         this.desc = desc;
     }
 
-    public String getcUrl() {
-        return cUrl;
+    public String getCategoryUrl() {
+        return categoryUrl;
     }
 
-    public void setcUrl(String cUrl) {
-        this.cUrl = cUrl;
+    public void setCategoryUrl(String categoryUrl) {
+        this.categoryUrl = categoryUrl;
     }
 
     public String getId() {

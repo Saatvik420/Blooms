@@ -5,23 +5,35 @@ import in.codingage.blooms.dto.CategoryRequest;
 import in.codingage.blooms.dto.CategoryResponse;
 import in.codingage.blooms.models.Category;
 import in.codingage.blooms.models.Status;
+import in.codingage.blooms.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@RestController
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     // CRUD - Create, Read, Update , Delete
 
 //    Supplier<Integer> capacitySupplier = () -> (int) (Math.random() * 10) + 1;
 
-    public void createCategory(CategoryRequest categoryRequest){
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+
+    //POST
+    @PostMapping()
+    public void createCategory(@RequestBody CategoryRequest categoryRequest) {
         Category category = new Category();
         // coming from ui request
         category.setName(categoryRequest.getTitle());
         category.setDescription(categoryRequest.getDesc());
-        category.setImageUrl(categoryRequest.getcUrl());
+        category.setImageUrl(categoryRequest.getCategoryUrl());
 
         // for now lets' give this access only to admins
         category.setStatus(Status.PUBLISHED.getDisplayName());
@@ -35,31 +47,60 @@ public class CategoryController {
 
         // local db - item save
         Database database = Database.getInstance();
+
+        // persist category object to database
+        categoryRepository.save(category);
+
+
         database.getCategoryList().add(category);
     }
 
-    public CategoryResponse getCategory(String categoryId){
-        List<Category> categoryList = Database.getInstance().getCategoryList();
-        for(Category category : categoryList){
-            if(category.getId().equals(categoryId)){
-                CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setcUrl(category.getImageUrl());
-                categoryResponse.setId(category.getId());
-                categoryResponse.setTitle(category.getName());
-                categoryResponse.setDesc(category.getDescription());
-                return categoryResponse;
-            }
+
+    @GetMapping
+    public CategoryResponse getCategory(@RequestParam String categoryId) {
+//        List<Category> categoryList = categoryRepository.findAll();
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isPresent()) {
+            CategoryResponse categoryResponse = new CategoryResponse();
+            categoryResponse.setCategoryUrl(category.get().getImageUrl());
+            categoryResponse.setId(category.get().getId());
+            categoryResponse.setTitle(category.get().getName());
+            categoryResponse.setDesc(category.get().getDescription());
+            return categoryResponse;
         }
         return null;
     }
 
-    public List<CategoryResponse> getCategories(){
-        List<Category> categoryList = Database.getInstance().getCategoryList();
+
+    @GetMapping("/{categoryId}")
+    public CategoryResponse getCategoryByPathParam(@PathVariable(value = "categoryId") String categoryId) {
+//        List<Category> categoryList = Database.getInstance().getCategoryList();
+//        for(Category category : categoryList){
+//            if(category.getId().equals(categoryId)){
+//                CategoryResponse categoryResponse = new CategoryResponse();
+//                categoryResponse.setCategoryUrl(category.getImageUrl());
+//                categoryResponse.setId(category.getId());
+//                categoryResponse.setTitle(category.getName());
+//                categoryResponse.setDesc(category.getDescription());
+//                return categoryResponse;
+//            }
+//        }
+//        return null;
+
+        return getCategory(categoryId);
+    }
+
+
+    // GET
+    @GetMapping("/all")
+    public List<CategoryResponse> getCategories() {
+//        List<Category> categoryList = Database.getInstance().getCategoryList();
+        List<Category> categoryList = categoryRepository.findAll();
         List<CategoryResponse> categoryResponses = new ArrayList<>();
-        for(Category category : categoryList) {
+        for (Category category : categoryList) {
             if (category.isActive()) {
                 CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setcUrl(category.getImageUrl());
+                categoryResponse.setCategoryUrl(category.getImageUrl());
                 categoryResponse.setId(category.getId());
                 categoryResponse.setTitle(category.getName());
                 categoryResponse.setDesc(category.getDescription());
@@ -67,53 +108,55 @@ public class CategoryController {
             }
         }
         return categoryResponses;
-        }
-
-     public boolean deleteCategory(String categoryId){
-        // iterate the list that comes from your database and set the active flag to false
-         // return true
-         // if id not found, return false
-
-         List<Category> categoryList = Database.getInstance().getCategoryList();
-
-         for(Category cat : categoryList){
-             if(cat.getId().equals(categoryId)){
-                 // hard delete
-//                 categoryList.remove(cat)
-                 // soft delete [db hai, you have status field which is inactive]
-                 cat.setActive(false);
-                 return true;
-             }
-         }
-         return false;
-     }
-
-     public CategoryResponse updateCategory(CategoryRequest categoryRequest){
-        // fetch category by id and update its name, desc and curl using category request
-         // validation to return from here only if id is not present
-         CategoryResponse categoryResponse = new CategoryResponse();
-         if(categoryRequest.getId() == null){
-             // we will send error to UI later
-             return categoryResponse;
-         }
-         List<Category> categoryResponses = Database.getInstance().getCategoryList();
-
-         for(Category category : categoryResponses){
-             if(category.getId().equals(categoryRequest.getId())){
-                 category.setName(categoryRequest.getTitle());
-                 category.setDescription(categoryRequest.getDesc());
-                 category.setImageUrl(categoryRequest.getcUrl());
-                 // create a category response object
-                 categoryResponse.setDesc(category.getDescription());
-                 categoryResponse.setId(category.getId());
-                 categoryResponse.setcUrl(category.getImageUrl());
-                 categoryResponse.setTitle(category.getName());
-                 return categoryResponse;
-             }
-         }
-         return categoryResponse;
-     }
     }
+
+    // DELETE
+    @DeleteMapping
+    public boolean deleteCategory(String categoryId) {
+        // iterate the list that comes from your database and set the active flag to false
+        // return true
+        // if id not found, return false
+
+//         List<Category> categoryList = Database.getInstance().getCategoryList();
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            category.setActive(false);
+            categoryRepository.save(category);
+            return true;
+        }
+        return false;
+
+    }
+
+    // UPDATE - PUT
+    @PutMapping
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest) {
+        // fetch category by id and update its name, desc and curl using category request
+        // validation to return from here only if id is not present
+        CategoryResponse categoryResponse = new CategoryResponse();
+        if (categoryRequest.getId() == null) {
+            // we will send error to UI later
+            return categoryResponse;
+        }
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryRequest.getId());
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+
+            category.setName(categoryRequest.getTitle());
+            category.setDescription(categoryRequest.getDesc());
+            category.setImageUrl(categoryRequest.getCategoryUrl());
+            // create a category response object
+            categoryResponse.setDesc(category.getDescription());
+            categoryResponse.setId(category.getId());
+            categoryResponse.setCategoryUrl(category.getImageUrl());
+            categoryResponse.setTitle(category.getName());
+            return categoryResponse;
+        }
+        return categoryResponse;
+    }
+}
 
 
 
