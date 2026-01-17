@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SubCategoryRequest {
-    private String categoryId;
+public class SubCategoryDetail {
+    private String subCategoryId;
     private String name;
-    private String description;
-
 }
