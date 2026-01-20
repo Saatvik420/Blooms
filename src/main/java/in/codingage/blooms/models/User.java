@@ -1,5 +1,7 @@
 package in.codingage.blooms.models;
 
+
+// hibearnte orm
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
