@@ -1,7 +1,7 @@
 package in.codingage.blooms.models;
 
 
-// hibearnte orm
+// hibernate orm
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,6 +15,7 @@ public class User {
     private String name;
     private String profileUrl;
     private String password;
+    private String phone;
 
     public String getId() {
         return id;
@@ -62,5 +63,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

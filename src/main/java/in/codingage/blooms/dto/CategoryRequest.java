@@ -6,14 +6,21 @@ public class CategoryRequest {
     private String desc;
     private String categoryUrl;
 
-    public String getId() {
-        return id;
+    public CategoryRequest() {
     }
 
     public CategoryRequest(String title, String desc, String categoryUrl) {
         this.title = title;
         this.desc = desc;
         this.categoryUrl = categoryUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
